@@ -5,13 +5,22 @@
 {{-- 🔥 HEADER --}}
 <div class="flex justify-between items-center mb-6">
     <h1 class="text-2xl font-bold text-gray-800">Productos</h1>
-
-    <button onclick="abrirModal()"
-        class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
-        + Nuevo producto
-    </button>
 </div>
 
+{{-- 🔥 BOTONES --}}
+<div class="flex gap-3 mb-6">
+
+    <button id="btnStockGlobal"
+        class="bg-gray-700 text-white px-5 py-2 rounded-lg shadow hover:bg-gray-800 transition">
+        + Gestionar existencias
+    </button>
+
+    <button id="btnNuevoProducto"
+        class="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+        + Nuevo producto
+    </button>
+
+</div>
 
 {{-- 🔍 FILTROS --}}
 <div class="bg-white rounded-xl shadow p-4 mb-6 flex flex-wrap gap-4">
@@ -24,7 +33,8 @@
         <option value="">Todas las categorías</option>
         <option value="Caballero">Caballero</option>
         <option value="Dama">Dama</option>
-    </select>
+        <option value="Niño">Niño</option>
+    </select>  
 
     <select id="filtroStock" class="border rounded-lg px-3 py-2">
         <option value="">Todo el stock</option>
@@ -34,7 +44,6 @@
 
 </div>
 
-
 {{-- 🔥 TABLA --}}
 <div class="bg-white rounded-xl shadow p-6 overflow-x-auto">
 
@@ -42,10 +51,13 @@
 
         <thead class="text-gray-500 border-b">
             <tr>
-                <th class="py-3 text-center">Imagen</th>
+                <th class="py-3 text-center">ID</th>
+                <th class="text-center">Imagen</th>
                 <th class="text-center">Nombre</th>
                 <th class="text-center">Categoría</th>
-                <th class="text-center">Color</th>
+                <th class="text-center">Talla</th>
+                <th class="text-center">Color primario</th>
+                <th class="text-center">Color secundario</th>
                 <th class="text-center">Stock</th>
                 <th class="text-center">Costo</th>
                 <th class="text-center">Precio</th>
@@ -54,95 +66,136 @@
                 <th class="text-center">Acciones</th>
             </tr>
         </thead>
+<tbody>
 
-        <tbody>
+@foreach($productos as $producto)
 
-        @foreach($productos as $producto)
+@php
+    $variaciones = $producto->variaciones;
+@endphp
 
-        @php
-            $variacion = $producto->variaciones->first();
-        @endphp
+<tr class="border-t hover:bg-gray-50">
 
-        <tr class="border-t hover:bg-gray-50 align-middle">
+    {{-- ID --}}
+    <td class="text-center">{{ $producto->id }}</td>
 
-            {{-- IMG --}}
-            <td class="py-3 text-center">
-                <img src="{{ $producto->imagen ? asset($producto->imagen->url) : '/img/default.png' }}"
-                     onclick="verImagen(this.src)"
-                     class="table-img cursor-pointer hover:scale-110 transition">
-            </td>
+    {{-- IMG --}}
+    <td class="text-center">
+        <img src="{{ $producto->imagen ? asset($producto->imagen->url) : '/img/default.png' }}"
+             class="table-img">
+    </td>
 
-            {{-- NOMBRE --}}
-            <td class="py-3 text-center">
-                {{ $producto->modelo->nombre ?? 'N/A' }}
-            </td>
+    {{-- NOMBRE --}}
+    <td class="text-center font-semibold">
+        {{ $producto->modelo->nombre }}
+    </td>
 
-            {{-- CATEGORIA --}}
-            <td class="py-3 text-center">
-                {{ $producto->modelo->categoria->nombre ?? 'N/A' }}
-            </td>
+    {{-- CATEGORIA --}}
+    <td class="text-center">
+        {{ $producto->modelo->categoria->nombre }}
+    </td>
 
-            {{-- COLOR --}}
-            <td class="py-3 text-center">
-                {{ $variacion->color->nombre ?? '-' }}
-            </td>
+    {{-- 🔥 TALLAS TIPO NIKE --}}
+    <td class="text-center">
+        <div class="flex flex-wrap gap-2 justify-center">
 
-            {{-- STOCK --}}
-            <td class="py-3 text-green-600 font-semibold text-center">
-                {{ $variacion->stock ?? 0 }}
-            </td>
+            @foreach($variaciones as $v)
 
-            {{-- COSTO --}}
-            <td class="py-3 text-gray-500 text-center">
-                ${{ number_format($variacion->costo ?? 0, 0, ',', '.') }}
-            </td>
+                <span
+                    class="px-2 py-1 rounded text-xs font-semibold
+                    {{ $v->stock == 0 
+                        ? 'bg-gray-100 text-gray-400 line-through' 
+                        : 'bg-green-100 text-green-700' }}">
 
-            {{-- PRECIO --}}
-            <td class="py-3 text-center">
-                ${{ number_format($variacion->precio ?? 0, 0, ',', '.') }}
-            </td>
+                    {{ $v->talla->numero }}
+                    ({{ $v->stock }})
 
-            {{-- DESCUENTO --}}
-            <td class="py-3 text-red-500 font-semibold text-center">
-                @if($variacion && $variacion->tiene_descuento)
-                    -${{ number_format($variacion->valor_descuento, 0, ',', '.') }}
-                @else
-                    -
+                </span>
+
+            @endforeach
+
+        </div>
+    </td>
+
+    {{-- 🔥 COLORES ÚNICOS --}}
+    <td class="text-center">
+        <div class="flex gap-2 justify-center">
+
+            @php
+                $colores = [];
+            @endphp
+
+            @foreach($variaciones as $v)
+
+                @if(!in_array($v->colorPrimario->nombre, $colores))
+                    @php $colores[] = $v->colorPrimario->nombre; @endphp
+
+                    <span
+                    class="w-4 h-4 rounded-full border"
+                    style="background: {{ $v->colorPrimario->nombre }};">
+                </span>
                 @endif
-            </td>
 
-            {{-- GANANCIA --}}
-            <td class="py-3 text-green-600 font-bold text-center">
-                @php
-                    $precioFinal = ($variacion && $variacion->tiene_descuento)
-                        ? $variacion->precio - $variacion->valor_descuento
-                        : $variacion->precio;
+                @if($v->colorSecundario && !in_array($v->colorSecundario->nombre, $colores))
+                    @php $colores[] = $v->colorSecundario->nombre; @endphp
 
-                    $ganancia = $precioFinal - ($variacion->costo ?? 0);
-                @endphp
+                    <span
+                        class="w-4 h-4 rounded-full border"
+                        style="background: {{ $v->colorSecundario->nombre }};">
+                    </span>
+                    </span>
+                @endif
 
-                ${{ number_format($ganancia, 0, ',', '.') }}
-            </td>
+            @endforeach
 
-            {{-- ACCIONES --}}
-            <td class="py-3">
-                <div class="table-actions">
-                    <button class="bg-gray-200 px-2 py-1 rounded text-xs">Gestionar</button>
-                    <button class="bg-blue-500 text-white px-2 py-1 rounded text-xs">Editar</button>
-                    <button class="bg-red-500 text-white px-2 py-1 rounded text-xs">Eliminar</button>
-                </div>
-            </td>
+        </div>
+    </td>
 
-        </tr>
+    {{-- 🔥 STOCK TOTAL --}}
+    <td class="text-center font-bold text-green-600">
+        {{ $variaciones->sum('stock') }}
+    </td>
 
-        @endforeach
+    {{-- 🔥 COSTO PROMEDIO --}}
+    <td class="text-center">
+        ${{ number_format($variaciones->avg('costo'), 0, ',', '.') }}
+    </td>
 
-        </tbody>
+    {{-- 🔥 PRECIO PROMEDIO --}}
+    <td class="text-center">
+        ${{ number_format($variaciones->avg('precio'), 0, ',', '.') }}
+    </td>
+
+    {{-- 🔥 DESC --}}
+    <td class="text-center text-red-500">
+        -
+    </td>
+
+    {{-- 🔥 GANANCIA --}}
+    <td class="text-center text-green-600 font-bold">
+        ${{ number_format(
+            $variaciones->avg('precio') - $variaciones->avg('costo'),
+            0, ',', '.'
+        ) }}
+    </td>
+
+    {{-- ACCIONES --}}
+    <td class="text-center">
+        <button class="btn-stock bg-gray-200 px-2 py-1 rounded text-xs"
+            data-id="{{ $producto->id }}">
+            Gestionar
+        </button>
+    </td>
+
+</tr>
+
+@endforeach
+
+</tbody>
 
     </table>
 
 </div>
-
 
 {{-- 🔥 MODAL IMAGEN --}}
 <div id="modalImagen"
@@ -153,10 +206,10 @@
 
 </div>
 
-
-{{-- 🔥 MODAL CREAR PRODUCTO --}}
+{{-- 🔥 MODALES --}}
 @include('admin.productos.modal-create')
-
+@include('admin.productos.modal-stock-global')
+@include('admin.productos.modal-stock-producto')
 
 @endsection
 
@@ -200,23 +253,6 @@ $(document).ready(function () {
     });
 
 });
-
-// 🔥 MODAL FUNCIONES (FUERA DEL READY)
-function abrirModal() {
-    const modal = document.getElementById('modalProducto');
-    if (!modal) return;
-
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
-
-function cerrarModal() {
-    const modal = document.getElementById('modalProducto');
-    if (!modal) return;
-
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-}
 
 </script>
 @endpush

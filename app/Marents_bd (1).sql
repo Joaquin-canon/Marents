@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 26-03-2026 a las 22:25:26
+-- Tiempo de generación: 27-03-2026 a las 22:03:46
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -89,7 +89,10 @@ INSERT INTO `categoria` (`id`, `nombre`) VALUES
 (1, 'Caballero'),
 (2, 'Dama'),
 (3, 'Niño'),
-(4, 'Personalizado');
+(4, 'Personalizado'),
+(5, 'Vans'),
+(6, 'Pisa Huevos'),
+(7, 'Botas');
 
 -- --------------------------------------------------------
 
@@ -99,19 +102,41 @@ INSERT INTO `categoria` (`id`, `nombre`) VALUES
 
 CREATE TABLE `color` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(50) DEFAULT NULL
+  `nombre` varchar(50) DEFAULT NULL,
+  `hex` varchar(7) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `color`
 --
 
-INSERT INTO `color` (`id`, `nombre`) VALUES
-(1, 'Negro'),
-(2, 'Blanco'),
-(3, 'Rojo'),
-(4, 'Azul'),
-(5, 'Café');
+INSERT INTO `color` (`id`, `nombre`, `hex`) VALUES
+(1, 'Negro', NULL),
+(2, 'Blanco', NULL),
+(3, 'Rojo', NULL),
+(4, 'Azul', NULL),
+(5, 'Café', NULL),
+(6, 'Negro', '#000000'),
+(7, 'Blanco', '#FFFFFF'),
+(8, 'Azul', '#1D4ED8'),
+(9, 'Rojo', '#DC2626'),
+(10, 'Gris', '#6B7280'),
+(11, 'Marrón', '#8B4513'),
+(12, 'Beige', '#F5F5DC'),
+(13, 'Rosado', '#EC4899'),
+(14, 'Naranja', '#F97316'),
+(15, 'Morado', '#7C3AED'),
+(16, 'Verde oliva', '#556B2F'),
+(17, 'Verde claro', '#22C55E'),
+(18, 'Azul claro', '#38BDF8'),
+(19, 'Gris claro', '#D1D5DB'),
+(20, 'Dorado', '#D4AF37'),
+(21, 'Plateado', '#C0C0C0'),
+(22, 'Vino tinto', '#7F1D1D'),
+(23, 'Camel', '#C19A6B'),
+(24, 'Nude', '#E5C1A7'),
+(25, 'Terracota', '#E2725B'),
+(26, 'Chocolate', '#5C4033');
 
 -- --------------------------------------------------------
 
@@ -258,6 +283,13 @@ CREATE TABLE `producto` (
   `estado` enum('activo','inactivo') DEFAULT 'activo'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO `producto` (`id`, `modelo_id`, `descripcion`, `estado`) VALUES
+(1, 3, 'Producto prueba Cool', 'activo');
+
 -- --------------------------------------------------------
 
 --
@@ -298,8 +330,20 @@ CREATE TABLE `producto_variacion` (
   `stock` int(11) DEFAULT 0,
   `costo` decimal(10,2) DEFAULT NULL,
   `tiene_descuento` tinyint(1) NOT NULL DEFAULT 0,
-  `valor_descuento` decimal(10,2) DEFAULT NULL
+  `valor_descuento` decimal(10,2) DEFAULT NULL,
+  `color_secundario_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `producto_variacion`
+--
+
+INSERT INTO `producto_variacion` (`id`, `producto_id`, `talla_id`, `color_id`, `precio`, `stock`, `costo`, `tiene_descuento`, `valor_descuento`, `color_secundario_id`) VALUES
+(6, 1, 1, 1, 80000.00, 5, 40000.00, 0, NULL, NULL),
+(7, 1, 2, 1, 80000.00, 5, 40000.00, 0, NULL, NULL),
+(8, 1, 3, 1, 80000.00, 5, 40000.00, 0, NULL, NULL),
+(9, 1, 4, 1, 80000.00, 5, 40000.00, 0, NULL, NULL),
+(10, 1, 5, 1, 80000.00, 5, 40000.00, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -508,7 +552,8 @@ ALTER TABLE `producto_variacion`
   ADD PRIMARY KEY (`id`),
   ADD KEY `producto_id` (`producto_id`),
   ADD KEY `talla_id` (`talla_id`),
-  ADD KEY `color_id` (`color_id`);
+  ADD KEY `color_id` (`color_id`),
+  ADD KEY `fk_color_secundario` (`color_secundario_id`);
 
 --
 -- Indices de la tabla `sessions`
@@ -558,13 +603,13 @@ ALTER TABLE `carrito_detalle`
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `color`
 --
 ALTER TABLE `color`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `failed_jobs`
@@ -594,7 +639,7 @@ ALTER TABLE `modelo`
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `producto_imagen`
@@ -612,7 +657,7 @@ ALTER TABLE `producto_personalizacion`
 -- AUTO_INCREMENT de la tabla `producto_variacion`
 --
 ALTER TABLE `producto_variacion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `talla`
@@ -677,6 +722,7 @@ ALTER TABLE `producto_personalizacion`
 -- Filtros para la tabla `producto_variacion`
 --
 ALTER TABLE `producto_variacion`
+  ADD CONSTRAINT `fk_color_secundario` FOREIGN KEY (`color_secundario_id`) REFERENCES `color` (`id`),
   ADD CONSTRAINT `producto_variacion_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `producto` (`id`),
   ADD CONSTRAINT `producto_variacion_ibfk_2` FOREIGN KEY (`talla_id`) REFERENCES `talla` (`id`),
   ADD CONSTRAINT `producto_variacion_ibfk_3` FOREIGN KEY (`color_id`) REFERENCES `color` (`id`);
