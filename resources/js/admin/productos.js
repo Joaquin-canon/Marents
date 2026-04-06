@@ -1,199 +1,329 @@
-// 🔥 MODAL CREAR PRODUCTO
-function abrirModal() {
-    const modal = document.getElementById('modalProducto');
-    if (!modal) return;
+import $ from 'jquery';
+window.$ = window.jQuery = $;
 
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
+import 'datatables.net';
 
-// 🔥 MODAL STOCK GLOBAL
-function abrirModalStockGlobal() {
-    const modal = document.getElementById('modalStockGlobal');
-    if (!modal) return;
+console.log('PRODUCTOS JS PRO');
 
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
+let variacionesGlobal = [];
+let imagenProducto = null;
+let colorSeleccionado = null;
 
-// 🔥 MODAL STOCK PRODUCTO
-function abrirModalStock(id) {
-    const modal = document.getElementById('modalStockProducto');
-    const input = document.getElementById('producto_id');
+document.addEventListener('DOMContentLoaded', function () {
 
-    if (!modal || !input) return;
+    // =========================
+    // DATATABLE PRO
+    // =========================
+const tabla = $('#tabla-productos').DataTable({
+    pageLength: 10,
+    scrollX: true,
+    ordering: true,
 
-    input.value = id;
+    dom: '<"top-bar"l>rt<"bottom-bar"ip>',
 
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
+    pagingType: "simple_numbers", // 👈 ESTO ES LO QUE TE FALTA
 
-
-// 🔥 EVENTOS
-document.addEventListener('DOMContentLoaded', () => {
-
-    console.log("JS PRODUCTOS OK"); // DEBUG
-
-    // ✅ BOTÓN NUEVO PRODUCTO
-    document.querySelector('#btnNuevoProducto')?.addEventListener('click', abrirModal);
-
-    // ✅ BOTÓN STOCK GLOBAL
-    document.querySelector('#btnStockGlobal')?.addEventListener('click', abrirModalStockGlobal);
-
-    // ✅ BOTONES POR PRODUCTO
-    document.querySelectorAll('.btn-stock').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const id = btn.dataset.id;
-            abrirModalStock(id);
-        });
-    });
-
-    // 🔥 CERRAR MODALES (CLAVE)
-    document.querySelectorAll('.cerrarModal').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const modal = btn.closest('.fixed');
-            modal.classList.add('hidden');
-        });
-    });
-
-    // 🔥 CERRAR AL HACER CLICK FUERA
-    document.querySelectorAll('.modal').forEach(modal => {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-            }
-        });
-    });
-
-    // 🔥 TOGGLE DESCUENTO
-    const toggle = document.getElementById('toggleDescuento');
-    const input = document.getElementById('inputDescuento');
-
-    if (toggle && input) {
-        toggle.addEventListener('change', () => {
-            if (toggle.checked) {
-                input.classList.remove('hidden');
-            } else {
-                input.classList.add('hidden');
-                input.value = '';
-            }
-        });
-    }
-
-});
-
-// 🔥 SELECT DINÁMICO
-document.addEventListener('DOMContentLoaded', () => {
-
-    const categoria = document.getElementById('selectCategoria');
-    const modelo = document.getElementById('selectModelo');
-    const talla = document.getElementById('selectTalla');
-
-    if (!categoria) return;
-
-    categoria.addEventListener('change', async () => {
-
-        modelo.innerHTML = '<option>Cargando...</option>';
-
-        const res = await fetch(`/admin/modelos/${categoria.value}`);
-        const data = await res.json();
-
-        modelo.innerHTML = '<option value="">Seleccionar</option>';
-
-        data.forEach(m => {
-            modelo.innerHTML += `<option value="${m.id}">${m.nombre}</option>`;
-        });
-
-    });
-
-    modelo.addEventListener('change', async () => {
-
-        talla.innerHTML = '<option>Cargando...</option>';
-
-        const res = await fetch(`/admin/tallas/${modelo.value}`);
-        const data = await res.json();
-
-        talla.innerHTML = '<option value="">Seleccionar</option>';
-
-        data.forEach(t => {
-            talla.innerHTML += `<option value="${t.id}">${t.numero}</option>`;
-        });
-
-    });
-
-});
-
-const modelo = document.getElementById('selectModelo');
-const info = document.getElementById('infoProducto');
-
-modelo?.addEventListener('change', async () => {
-
-    if (!modelo.value) return;
-
-    const res = await fetch(`/admin/producto-info/${modelo.value}`);
-    const data = await res.json();
-
-    if (!data) {
-        info.classList.remove('hidden');
-        document.getElementById('estadoStock').innerText = 'Sin producto';
-        return;
-    }
-
-    info.classList.remove('hidden');
-
-    // 🔥 IMAGEN
-    document.getElementById('imgProducto').src =
-        data.imagen ? '/' + data.imagen.url : '/img/default.png';
-
-    // 🔥 COLORES
-    const coloresDiv = document.getElementById('colores');
-    coloresDiv.innerHTML = '';
-
-    if (data.variaciones.length === 0) {
-        document.getElementById('estadoStock').innerText =
-            'Sin existencias registradas';
-        return;
-    }
-
-    document.getElementById('estadoStock').innerText =
-        `${data.variaciones.length} variaciones registradas`;
-
-    data.variaciones.forEach(v => {
-
-        if (v.color_primario) {
-            coloresDiv.innerHTML += `
-                <span class="px-2 py-1 bg-gray-200 rounded text-xs">
-                    ${v.color_primario.nombre}
-                </span>`;
+    language: {
+        info: "Mostrando _START_ a _END_ de _TOTAL_ productos",
+        lengthMenu: "Mostrar _MENU_",
+        paginate: {
+            next: "›",
+            previous: "‹"
         }
+    }
+});
 
-        if (v.color_secundario) {
-            coloresDiv.innerHTML += `
-                <span class="px-2 py-1 bg-gray-100 rounded text-xs">
-                    ${v.color_secundario.nombre}
-                </span>`;
-        }
+    // =========================
+    // BUSCADOR CON DELAY (UX)
+    // =========================
+    let timeoutBusqueda;
+
+    $('#buscar').on('keyup', function () {
+
+        clearTimeout(timeoutBusqueda);
+
+        let input = this;
+
+        timeoutBusqueda = setTimeout(() => {
+            tabla.search(input.value).draw();
+        }, 250);
+
+    });
+
+    // =========================
+    // FILTRO CATEGORIA
+    // =========================
+    $('#filtroCategoria').on('change', function () {
+        tabla.column(0).search(this.value).draw();
+    });
+
+    // =========================
+    // ORDEN STOCK
+    // =========================
+    $('#ordenStock').on('change', function () {
+        let val = this.value;
+        tabla.order([4, val === 'mayor' ? 'desc' : 'asc']).draw();
+    });
+
+    // =========================
+    // EFECTO CLICK FILA
+    // =========================
+    $('#tabla-productos tbody').on('click', 'tr', function () {
+        $(this).toggleClass('bg-blue-50');
+    });
+
+    // =========================
+    // EVENTOS TABLA
+    // =========================
+ $('#tabla-productos').on('click', '.btn-stock', function (e) {
+    e.stopPropagation();
+
+    let modeloId = $(this).data('modelo'); // 👈 IMPORTANTE
+
+    $('#modalStockProducto').removeClass('hidden').addClass('flex');
+
+    // reset visual
+    $('#tallasProductoContainer').html('Cargando...');
+    $('#infoProducto').html('');
+
+    fetch(`/admin/producto-info/${modeloId}`)
+        .then(res => res.json())
+        .then(data => {
+
+            if (!data) return;
+
+            // INFO PRODUCTO
+            let nombre = data.modelo?.nombre ?? '';
+            let categoria = data.modelo?.categoria?.nombre ?? '';
+
+            $('#infoProducto').html(`
+                <p class="font-semibold text-lg">${nombre}</p>
+                <p class="text-sm text-gray-500">${categoria}</p>
+            `);
+
+            // VARIACIONES
+            let html = '';
+
+            data.variaciones.forEach(v => {
+
+                let talla = v.talla?.numero ?? '-';
+                let stock = v.stock ?? 0;
+                let color = v.color_primario?.nombre ?? 'Sin color';
+
+                html += `
+                    <div class="variacion-item cursor-pointer border rounded-lg px-3 py-2 flex justify-between hover:bg-gray-100"
+                         data-id="${v.id}">
+
+                        <span>
+                            ${color} - Talla ${talla}
+                        </span>
+
+                        <span class="text-xs text-gray-500">
+                            Stock: ${stock}
+                        </span>
+
+                    </div>
+                `;
+            });
+
+            $('#tallasProductoContainer').html(html);
+
+        });
+
+});
+
+
+
+
+
+
+
+
+
+
+    $('#tabla-productos').on('click', '.ver-imagen', function (e) {
+        e.stopPropagation();
+
+        let src = $(this).data('img');
+
+        $('#imagenGrande').attr('src', src);
+        $('#modalImagen').removeClass('hidden').addClass('flex');
+    });
+
+    // =========================
+    // BOTONES
+    // =========================
+    $('#btnNuevoProducto').on('click', function () {
+        $('#modalProducto').removeClass('hidden').addClass('flex');
+    });
+
+    $('#btnStockGlobal').on('click', function () {
+        $('#modalStockGlobal').removeClass('hidden').addClass('flex');
+    });
+
+    // =========================
+    // CATEGORIA → MODELOS
+    // =========================
+    $('#selectCategoria').on('change', function () {
+
+        let categoriaId = $(this).val();
+
+        $('#selectModelo')
+            .prop('disabled', true)
+            .html('<option>Cargando...</option>');
+
+        $('#coloresContainer').html('');
+        $('#tallasContainer').html('');
+        $('#previewImagenContainer').addClass('hidden');
+
+        fetch(`/admin/modelos/${categoriaId}`)
+            .then(res => res.json())
+            .then(data => {
+
+                let options = '<option value="">Seleccionar modelo</option>';
+
+                data.forEach(m => {
+                    options += `<option value="${m.id}">${m.nombre}</option>`;
+                });
+
+                $('#selectModelo')
+                    .html(options)
+                    .prop('disabled', false);
+            });
+
+    });
+
+    // =========================
+    // MODELO → VARIACIONES
+    // =========================
+    $('#selectModelo').on('change', function () {
+
+        let modeloId = $(this).val();
+
+        $('#coloresContainer').html('Cargando...');
+        $('#tallasContainer').html('');
+        $('#previewImagenContainer').addClass('hidden');
+
+        fetch(`/admin/producto-info/${modeloId}`)
+            .then(res => res.json())
+            .then(data => {
+
+                if (!data) return;
+
+                variacionesGlobal = data.variaciones || [];
+
+                imagenProducto = data.imagen
+                    ? '/' + data.imagen.url.replace(/^\/+/, '')
+                    : null;
+
+                if (variacionesGlobal.length === 0) {
+                    $('#coloresContainer').html(
+                        '<p class="text-gray-400 text-sm">Sin variaciones registradas</p>'
+                    );
+                    return;
+                }
+
+                let coloresUnicos = {};
+
+                variacionesGlobal.forEach(v => {
+                    if (v.color_primario) {
+                        coloresUnicos[v.color_primario.id] = v.color_primario;
+                    }
+                });
+
+                let html = '';
+
+                Object.values(coloresUnicos).forEach(c => {
+                    html += `
+                        <div class="color-item cursor-pointer border px-3 py-1 rounded transition hover:bg-gray-100"
+                             data-id="${c.id}">
+                            ${c.nombre}
+                        </div>
+                    `;
+                });
+
+                $('#coloresContainer').html(html);
+
+            });
 
     });
 
 });
 
-function renderStock(variaciones) {
+// =========================
+// COLOR
+// =========================
+$(document).on('click', '.color-item', function () {
 
-    const container = document.getElementById('stockPorTalla');
-    container.innerHTML = '';
+    $('.color-item')
+        .removeClass('bg-black text-white')
+        .addClass('bg-white');
 
-    variaciones.forEach(v => {
+    $(this)
+        .addClass('bg-black text-white');
 
-        const clase = v.stock == 0
-            ? 'bg-gray-100 text-gray-400 line-through'
-            : 'bg-green-100 text-green-700';
+    colorSeleccionado = $(this).data('id');
 
-        container.innerHTML += `
-            <div class="px-3 py-1 rounded ${clase}">
-                ${v.talla.numero} (${v.stock})
+    let filtradas = variacionesGlobal.filter(v => v.color_id == colorSeleccionado);
+
+    let html = '';
+
+    filtradas.forEach(v => {
+
+        let talla = v.talla?.numero ?? '-';
+        let stock = v.stock ?? 0;
+
+        html += `
+            <div class="talla-item cursor-pointer border px-3 py-1 rounded text-sm transition hover:bg-gray-100"
+                 data-id="${v.id}">
+                Talla ${talla} (Stock: ${stock})
             </div>
         `;
     });
-}
+
+    $('#tallasContainer').html(html);
+
+    if (imagenProducto) {
+        $('#previewImagen').attr('src', imagenProducto);
+        $('#previewImagenContainer').removeClass('hidden');
+    }
+
+});
+
+// =========================
+// TALLA
+// =========================
+$(document).on('click', '.talla-item', function () {
+
+    $('.talla-item').removeClass('bg-black text-white');
+
+    $(this).addClass('bg-black text-white');
+
+    $('#inputVariacion').val($(this).data('id'));
+});
+
+// =========================
+// MODALES
+// =========================
+$(document).on('click', '.cerrarModal', function () {
+    $(this).closest('.modal')
+        .addClass('hidden')
+        .removeClass('flex');
+});
+
+$(document).on('click', '.modal', function (e) {
+    if (e.target === this) {
+        $(this)
+            .addClass('hidden')
+            .removeClass('flex');
+    }
+});
+
+$(document).on('click', '.variacion-item', function () {
+
+    $('.variacion-item').removeClass('bg-black text-white');
+
+    $(this).addClass('bg-black text-white');
+
+    $('#inputVariacionProducto').val($(this).data('id'));
+});

@@ -14,7 +14,7 @@ class Categoria extends Model
         'nombre'
     ];
 
-    // 🔗 RELACIÓN (opcional pero muy útil)
+    // 🔗 RELACIÓN
     public function modelos()
     {
         return $this->hasMany(Modelo::class);

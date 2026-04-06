@@ -1,7 +1,6 @@
 import './bootstrap';
-import './bootstrap';
-import './admin/productos.js';
-
+import './admin/productos';
+import 'datatables.net';
 import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;

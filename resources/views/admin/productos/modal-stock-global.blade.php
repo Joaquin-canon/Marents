@@ -1,96 +1,98 @@
 <div id="modalStockGlobal"
-     class="modal fixed inset-0 bg-black/70 backdrop-blur hidden items-center justify-center z-50">
+class="modal hidden fixed inset-0 bg-black/70 z-[9999] flex items-center justify-center p-4">
 
-    <div class="bg-white w-full max-w-2xl rounded-2xl p-6 shadow-2xl">
+    <div class="bg-white w-[500px] max-w-full rounded-2xl p-6 shadow-2xl">
 
-        {{-- HEADER --}}
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold">Gestión de existencias</h2>
+        <!-- HEADER -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Gestión global de stock</h2>
 
             <button class="cerrarModal text-gray-400 text-xl">✕</button>
         </div>
 
-        <form method="POST" action="/admin/stock">
+        <form method="POST" action="/admin/stock-global">
             @csrf
 
-            <div class="grid grid-cols-2 gap-4">
+            <!-- CATEGORIA -->
+            <div class="mb-4">
+                <label class="text-sm font-semibold">Categoría</label>
 
-                {{-- CATEGORIA --}}
-                <select id="selectCategoria" class="border p-2 rounded">
-                    <option value="">Categoría</option>
+                <select id="selectCategoria"
+                    class="w-full border p-2 rounded mt-1">
+                    <option value="">Seleccionar...</option>
+
                     @foreach($categorias as $cat)
-                        <option value="{{ $cat->id }}">{{ $cat->nombre }}</option>
+                        <option value="{{ $cat->id }}">
+                            {{ $cat->nombre }}
+                        </option>
                     @endforeach
                 </select>
-
-                {{-- PRODUCTO --}}
-                <select id="selectModelo" name="modelo_id" class="border p-2 rounded">
-                    <option value="">Producto</option>
-                </select>
-
-                {{-- TALLA --}}
-                <td class="text-center">
-    <div class="flex flex-wrap gap-2 justify-center">
-
-        @foreach($producto->variaciones as $v)
-
-            <button
-                class="px-3 py-1 rounded border text-xs font-semibold
-                {{ $v->stock == 0 
-                    ? 'bg-gray-100 text-gray-400 line-through cursor-not-allowed' 
-                    : 'bg-white hover:bg-gray-100 border-gray-300' }}">
-
-                {{ $v->talla->numero }}
-
-                <span class="ml-1 text-[10px] text-gray-500">
-                    ({{ $v->stock }})
-                </span>
-
-            </button>
-
-        @endforeach
-
-    </div>
-</td>
-
-                {{-- CANTIDAD --}}
-                <input type="number" name="cantidad"
-                    class="border p-2 rounded"
-                    placeholder="Cantidad">
-
             </div>
 
-            {{-- 🔥 INFO PRODUCTO --}}
-            <div id="infoProducto"
-                 class="mt-6 p-4 bg-gray-50 rounded-lg hidden">
+            <!-- MODELO -->
+            <div class="mb-4">
+                <label class="text-sm font-semibold">Modelo</label>
 
-                <div class="flex gap-4 items-center">
+                <select id="selectModelo"
+                    class="w-full border p-2 rounded mt-1"
+                    disabled>
+                    <option value="">Selecciona categoría</option>
+                </select>
+            </div>
 
-                    <img id="imgProducto"
-                         class="w-16 h-16 object-contain rounded">
+            <!-- COLORES -->
+            <div class="mb-4">
+                <label class="text-sm font-semibold">Color</label>
 
-                    <div>
+                <div id="coloresContainer"
+                     class="flex flex-wrap gap-2 mt-2">
+                </div>
+            </div>
 
-                        <p class="text-sm text-gray-500">Colores</p>
+            <!-- IMAGEN PRODUCTO -->
+            <div id="previewImagenContainer"
+                 class="hidden mb-4">
 
-                        <div id="colores" class="flex gap-2 mt-1"></div>
+                <label class="text-sm font-semibold">Vista previa</label>
 
-                        <p id="estadoStock"
-                           class="text-xs text-gray-500 mt-2"></p>
-
-                    </div>
-
+                <div class="mt-2 flex justify-center">
+                    <img id="previewImagen"
+                         src=""
+                         class="w-32 h-32 object-cover rounded border shadow">
                 </div>
 
             </div>
 
-            {{-- BOTONES --}}
-            <div class="flex justify-end mt-6 gap-2">
-                <button type="button" class="cerrarModal bg-gray-200 px-3 py-2 rounded">
+            <!-- TALLAS -->
+            <div class="mb-4">
+                <label class="text-sm font-semibold">Tallas</label>
+
+                <div id="tallasContainer"
+                     class="flex flex-wrap gap-2 mt-2">
+                </div>
+            </div>
+
+            <!-- INPUT OCULTO -->
+            <input type="hidden" name="variacion_id" id="inputVariacion">
+
+            <!-- CANTIDAD -->
+            <div class="mb-4">
+                <label class="text-sm font-semibold">Cantidad a agregar</label>
+
+                <input type="number" name="cantidad"
+                    class="w-full border p-2 rounded mt-1"
+                    placeholder="Ej: 10" required>
+            </div>
+
+            <!-- BOTONES -->
+            <div class="flex justify-end gap-3 mt-4">
+                <button type="button"
+                    class="cerrarModal bg-gray-200 px-4 py-2 rounded">
                     Cancelar
                 </button>
 
-                <button class="bg-green-600 text-white px-4 py-2 rounded">
+                <button type="submit"
+                    class="bg-blue-600 text-white px-6 py-2 rounded">
                     Guardar
                 </button>
             </div>

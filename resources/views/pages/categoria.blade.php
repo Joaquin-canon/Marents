@@ -27,12 +27,13 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
 
         @foreach ($productos as $producto)
-            @include('components.product-card', [
-                'imagen' => $producto['imagen'],
-                'nombre' => $producto['nombre'],
-                'tallas' => $producto['tallas'],
-                'precio' => $producto['precio']
-            ])
+           @include('components.product-card', [
+    'id' => $producto->id,
+    'imagen' => $producto->imagen?->url,
+    'nombre' => $producto->modelo->nombre,
+    'tallas' => $producto->variaciones->pluck('talla.numero')->unique()->implode(','),
+    'precio' => $producto->variaciones->avg('precio')
+])
         @endforeach
 
     </div>

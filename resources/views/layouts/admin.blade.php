@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin - Marents</title>
+
+    {{-- 🔥 VITE --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    {{-- 🔥 DATATABLES CSS --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.tailwindcss.min.css">
+
 </head>
 
 <body class="bg-gray-100">
@@ -20,9 +25,17 @@
 
         <nav class="flex-1 p-4 space-y-2 text-sm">
 
-            <a href="/admin/dashboard" class="sidebar-item">Dashboard</a>
-            <a href="/admin/usuarios" class="sidebar-item">Usuarios</a>
-            <a href="/admin/productos" class="sidebar-item">Productos</a>
+            <a href="/admin/dashboard" class="sidebar-item hover:text-white/80">
+                Dashboard
+            </a>
+
+            <a href="/admin/usuarios" class="sidebar-item hover:text-white/80">
+                Usuarios
+            </a>
+
+            <a href="/admin/productos" class="sidebar-item hover:text-white/80">
+                Productos
+            </a>
 
         </nav>
 
@@ -64,9 +77,8 @@
 
 </div>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.tailwindcss.min.js"></script>
+{{-- 🔥 STACK GLOBAL DE MODALES (CLAVE 💣) --}}
+@stack('modals')
 
 </body>
 </html>
