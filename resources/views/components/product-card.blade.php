@@ -1,52 +1,71 @@
-<div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition duration-300 cursor-pointer">
+<a href="{{ url('/producto/' . $id) }}" class="block group">
+
+<div class="bg-white rounded-3xl overflow-hidden 
+            transition-all duration-300 
+            hover:shadow-xl hover:-translate-y-1 border border-gray-200">
 
     {{-- IMAGEN --}}
-    <div class="relative bg-gray-100 aspect-square overflow-hidden">
+    <div class="relative bg-[#f6f6f6] aspect-square flex items-center justify-center overflow-hidden">
 
-        <img src="{{ asset($imagen) }}"
-             class="w-full h-full object-contain transition duration-500 group-hover:scale-105">
+        <img 
+            src="{{ asset(
+                $imagen 
+                ? 'img/productos/' . ($categoria ?? 'caballero') . '/' . $imagen 
+                : 'img/default.png'
+            ) }}"
+            class="h-[75%] object-contain 
+                   transition duration-500 
+                   group-hover:scale-110">
+
+        {{-- GRADIENT OVERLAY --}}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
 
         {{-- FAVORITO --}}
-        <button class="absolute top-3 right-3 bg-white/80 backdrop-blur p-2 rounded-full shadow hover:scale-110 transition">
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 class="w-5 h-5 text-gray-700"
-                 fill="none"
-                 viewBox="0 0 24 24"
-                 stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                      d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 116.364 6.364L12 20.364 4.318 12.682a4.5 4.5 0 010-6.364z"/>
-            </svg>
+        <button type="button"
+            onclick="event.preventDefault(); event.stopPropagation();"
+            class="absolute top-3 right-3 bg-white/90 backdrop-blur-md 
+                   rounded-full p-2 shadow-sm 
+                   hover:scale-110 hover:bg-white transition">
+
+            <span class="text-gray-700 text-sm">❤️</span>
         </button>
 
     </div>
 
     {{-- INFO --}}
-    <div class="p-4 space-y-1">
+    <div class="p-4 space-y-2">
 
         {{-- PRECIO --}}
         <p class="text-lg font-bold text-black">
-            ${{ number_format($precio, 0, ',', '.') }}
+            ${{ number_format($precio ?? 0, 0, ',', '.') }}
         </p>
 
         {{-- NOMBRE --}}
-        <p class="text-sm font-semibold text-gray-800 leading-tight line-clamp-2">
+        <p class="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
             {{ $nombre }}
         </p>
 
-        {{-- SUBTEXTO --}}
-        <p class="text-xs text-gray-500">
+        {{-- SUB --}}
+        <p class="text-[11px] text-gray-400 uppercase tracking-widest">
             Performance
         </p>
 
-        {{-- TALLAS MINI --}}
+        {{-- TALLAS --}}
         <div class="flex flex-wrap gap-1 mt-2">
-            @foreach(explode(',', $tallas) as $t)
-                <span class="text-[10px] border px-1.5 py-0.5 rounded">
-                    {{ trim($t) }}
-                </span>
+
+            @foreach(explode(',', $tallas ?? '') as $t)
+                @if(trim($t) !== '')
+                    <span class="text-[10px] border border-gray-300 px-2 py-0.5 rounded-md 
+                                 text-gray-600 bg-gray-50">
+                        {{ trim($t) }}
+                    </span>
+                @endif
             @endforeach
+
         </div>
 
     </div>
 
 </div>
+
+</a>

@@ -8,8 +8,6 @@ class ProductoImagen extends Model
 {
     protected $table = 'producto_imagen';
 
-    public $timestamps = false; // 🔥 IMPORTANTE
-
     protected $fillable = [
         'producto_id',
         'url'

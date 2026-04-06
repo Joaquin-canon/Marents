@@ -95,7 +95,8 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-white text-black py-2 rounded-lg font-semibold hover:bg-gray-200 transition">
+    onclick="console.log('CLICK FUNCIONA')"
+    class="w-full bg-white text-black py-2 rounded-lg font-semibold hover:bg-gray-200 transition">
                     Iniciar sesión
                 </button>
 
