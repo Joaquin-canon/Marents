@@ -1,10 +1,59 @@
 @import './admin/productos.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
-/* 🔥 SIDEBAR */
+/* =========================================================
+   🎨 MARENTS THEME (BLANCO + NEGRO + GOLDEN)
+========================================================= */
+
+:root {
+    --marents-gold: #EDE734;
+    --marents-black: #000000;
+    --marents-white: #FFFFFF;
+}
+
+body {
+    background: var(--marents-white);
+    color: var(--marents-black);
+}
+
+/* 🎯 UTILIDADES DE COLOR */
+.text-marents-gold {
+    color: var(--marents-gold);
+}
+
+.bg-marents-gold {
+    background: var(--marents-gold);
+}
+
+.border-marents-gold {
+    border-color: var(--marents-gold);
+}
+
+
+/* =========================================================
+   ✨ EFECTOS GENERALES
+========================================================= */
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all .8s ease;
+}
+
+.fade-in.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   🔥 SIDEBAR (ADMIN)
+========================================================= */
+
 .sidebar-item {
     display: block;
     padding: 10px 12px;
@@ -17,7 +66,10 @@
 }
 
 
-/* 🔥 BADGES */
+/* =========================================================
+   🔥 BADGES
+========================================================= */
+
 .badge-blue {
   @apply bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-semibold;
 }
@@ -35,7 +87,10 @@
 }
 
 
-/* 🔥 BOTONES */
+/* =========================================================
+   🔥 BOTONES
+========================================================= */
+
 .btn-icon {
   @apply text-lg text-gray-500 hover:text-gray-800 transition;
 }
@@ -44,7 +99,55 @@
   @apply text-sm font-semibold hover:underline;
 }
 
-/* 🔥 DATATABLE FIX FINAL */
+/* 🆕 BOTÓN PRINCIPAL MARENTS */
+.btn-marents {
+    background: var(--marents-gold);
+    color: var(--marents-black);
+    padding: 12px 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.btn-marents:hover {
+    transform: scale(1.05);
+}
+
+/* 🆕 BOTÓN SECUNDARIO */
+.btn-marents-outline {
+    border: 1px solid var(--marents-black);
+    padding: 12px 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.btn-marents-outline:hover {
+    background: var(--marents-black);
+    color: var(--marents-white);
+}
+
+
+/* =========================================================
+   🔥 CARDS (NUEVO ESTILO LIMPIO)
+========================================================= */
+
+.card-marents {
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 20px;
+    background: #fff;
+    transition: 0.3s;
+}
+
+.card-marents:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+
+/* =========================================================
+   🔥 DATATABLE FIX
+========================================================= */
 
 table.dataTable {
     width: 100% !important;
@@ -58,7 +161,6 @@ table.dataTable td {
     text-align: center;
 }
 
-/* 🔥 CONTROL TEXTO */
 .nowrap {
     white-space: nowrap;
 }
@@ -67,12 +169,10 @@ table.dataTable td {
     white-space: normal;
 }
 
-/* 🔥 RESPONSIVE */
 .dataTables_wrapper {
     overflow-x: auto;
 }
 
-/* 🔥 COLUMNAS CLAVE */
 table.dataTable td:first-child {
     width: 90px;
 }
@@ -80,10 +180,17 @@ table.dataTable td:first-child {
 table.dataTable td:last-child {
     width: 180px;
 }
+
 td, th {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+
+/* =========================================================
+   ✨ ANIMACIONES
+========================================================= */
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -97,4 +204,38 @@ td, th {
 
 .animate-fadeIn {
     animation: fadeIn .25s ease;
+}
+
+
+/* 🎯 COLORES POR CATEGORÍA */
+
+:root {
+    --color-mujer: #EDE734;   /* NE-060 Torres del Paine */
+    --color-hombre: #000000;  /* NE-035 Sucre */
+}
+
+/* UTILIDADES */
+
+.text-mujer {
+    color: var(--color-mujer);
+}
+
+.bg-mujer {
+    background: var(--color-mujer);
+}
+
+.border-mujer {
+    border-color: var(--color-mujer);
+}
+
+.text-hombre {
+    color: var(--color-hombre);
+}
+
+.bg-hombre {
+    background: var(--color-hombre);
+}
+
+.border-hombre {
+    border-color: var(--color-hombre);
 }

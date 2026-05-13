@@ -17,10 +17,9 @@
             <div>
                 <h3 class="font-semibold mb-4">Categorías</h3>
                 <ul class="space-y-2 text-gray-400 text-sm">
-                    <li><a href="/categoria/caballero" class="hover:text-white">Caballero</a></li>
-                    <li><a href="/categoria/dama" class="hover:text-white">Dama</a></li>
-                    <li><a href="/categoria/ninas" class="hover:text-white">Niñas</a></li>
-                    <li><a href="/categoria/ninos" class="hover:text-white">Niños</a></li>
+                    <li><a href="/categoria/caballero" class="hover:text-white">Hombre</a></li>
+                    <li><a href="/categoria/dama" class="hover:text-white">Mujer</a></li>
+                    <li><a href="/categoria/ninas" class="hover:text-white">Niños</a></li>
                 </ul>
             </div>
 
@@ -29,8 +28,6 @@
                 <h3 class="font-semibold mb-4">Personalizados</h3>
                 <ul class="space-y-2 text-gray-400 text-sm">
                     <li><a href="/personalizados/pisa-huevos" class="hover:text-white">Pisa huevos</a></li>
-                    <li><a href="/personalizados/vans" class="hover:text-white">Vans</a></li>
-                    <li><a href="/personalizados/botas" class="hover:text-white">Botas</a></li>
                 </ul>
             </div>
 
