@@ -16,7 +16,9 @@
             <a href="/categoria/hombre" class="nav-marents-link">Hombre</a>
             <a href="/categoria/mujer" class="nav-marents-link">Mujer</a>
             <a href="/categoria/ninos" class="nav-marents-link">Niños</a>
-            <a href="/categoria/pisa-huevos" class="nav-marents-link">Pisa huevos</a>
+            <a href="{{ url('/pisa-huevos') }}" class="nav-marents-link">
+                Pisa huevos
+            </a>
             <a href="/categoria/outlet" class="nav-marents-link text-marents-gold">Outlet</a>
 
         </div>
@@ -54,7 +56,7 @@
         <a href="/categoria/hombre" class="mobile-marents-link">Hombre</a>
         <a href="/categoria/mujer" class="mobile-marents-link">Mujer</a>
         <a href="/categoria/ninos" class="mobile-marents-link">Niños</a>
-        <a href="/categoria/pisa-huevos" class="mobile-marents-link">Pisa huevos</a>
+        <a href="{{ url('/categoria/pisa-huevos') }}" class="mobile-marents-link">Pisa huevos</a>
         <a href="/categoria/outlet" class="mobile-marents-link text-marents-gold">Outlet</a>
 
         @guest
