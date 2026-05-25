@@ -10,33 +10,41 @@
         <div class="text-center mb-14 md:mb-20 scroll-anim">
 
             <span class="inline-block bg-black text-white px-4 py-2 text-xs sm:text-sm font-black uppercase tracking-[0.2em] mb-5">
-                Personalización Exclusiva
+                Colección Especial
             </span>
 
             <h1 class="text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-black uppercase leading-[0.95] text-black mb-6">
+
                 Pisa Huevos <br>
+
                 <span class="text-marents-gold">
-                    Personalizados
+                    Exclusivos y Personalizados
                 </span>
+
             </h1>
 
-            <p class="text-gray-600 max-w-3xl mx-auto text-base sm:text-lg md:text-xl font-semibold leading-relaxed">
-                No compres un diseño que todos tienen.
-                Crea un par que represente tu estilo, tu personalidad y tu esencia.
+            <p class="text-gray-600 max-w-4xl mx-auto text-base sm:text-lg md:text-xl font-semibold leading-relaxed">
+
+                Descubre nuestros modelos especiales listos para usar
+                o personaliza cualquier diseño con nombres, colores,
+                dibujos y detalles únicos hechos especialmente para ti.
+
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
 
-                <a href="https://api.whatsapp.com/send/?phone=573045332113&text=Hola%20quiero%20personalizar%20mis%20Pisa%20Huevos"
+                <a href="#productos"
                    class="bg-black text-white px-8 py-4 font-black uppercase hover:bg-marents-gold hover:text-black transition duration-300 shadow-lg text-center">
 
-                    Personalizar ahora
+                    Ver modelos especiales
+
                 </a>
 
-                <a href="#productos"
+                <a href="#personalizacion"
                    class="border-[3px] border-black px-8 py-4 font-black uppercase hover:bg-black hover:text-white transition duration-300 text-center">
 
-                    Ver modelos
+                    Cómo personalizar
+
                 </a>
 
             </div>
@@ -57,6 +65,77 @@
 
             <img src="{{ asset('img/productos/pisa_huevos/plantila_perso.jpeg') }}"
                  class="h-44 md:h-56 w-full object-cover rounded-2xl border-[3px] border-black shadow-lg hover:scale-105 transition duration-300">
+
+        </div>
+
+        {{-- DIFERENCIA --}}
+        <div class="grid lg:grid-cols-2 gap-8 mb-24 scroll-anim">
+
+            {{-- PRODUCTOS ESPECIALES --}}
+            <div class="border-[3px] border-black bg-white p-8 md:p-10 shadow-[8px_8px_0_#000]">
+
+                <span class="inline-block bg-black text-white px-4 py-2 text-xs font-black uppercase tracking-[0.2em] mb-6">
+                    Modelos exclusivos
+                </span>
+
+                <h2 class="text-3xl md:text-5xl font-black uppercase leading-none mb-6">
+
+                    Productos <br>
+                    especiales
+
+                </h2>
+
+                <p class="text-gray-600 text-lg font-semibold leading-relaxed mb-8">
+
+                    Contamos con diseños únicos ya creados por Marents,
+                    listos para comprar y destacar desde el primer paso.
+
+                </p>
+
+                <ul class="space-y-4 font-black uppercase text-sm tracking-[0.15em]">
+
+                    <li>✔ Diseños exclusivos</li>
+                    <li>✔ Ediciones especiales</li>
+                    <li>✔ Estilo único Marents</li>
+                    <li>✔ Listos para pedir</li>
+
+                </ul>
+
+            </div>
+
+            {{-- PERSONALIZACIÓN --}}
+            <div id="personalizacion"
+                 class="border-[3px] border-black bg-marents-gold p-8 md:p-10 shadow-[8px_8px_0_#000]">
+
+                <span class="inline-block bg-black text-white px-4 py-2 text-xs font-black uppercase tracking-[0.2em] mb-6">
+                    Personalización
+                </span>
+
+                <h2 class="text-3xl md:text-5xl font-black uppercase leading-none mb-6">
+
+                    Convierte cualquier <br>
+                    par en algo único
+
+                </h2>
+
+                <p class="text-black text-lg font-semibold leading-relaxed mb-8">
+
+                    También puedes tomar cualquier modelo base y personalizarlo
+                    completamente con nombres, frases, colores, personajes,
+                    dibujos o ideas propias.
+
+                </p>
+
+                <ul class="space-y-4 font-black uppercase text-sm tracking-[0.15em]">
+
+                    <li>✔ Nombres personalizados</li>
+                    <li>✔ Colores exclusivos</li>
+                    <li>✔ Diseños únicos</li>
+                    <li>✔ Hecho a tu gusto</li>
+
+                </ul>
+
+            </div>
 
         </div>
 
@@ -84,18 +163,18 @@
                 <div>
 
                     <p class="uppercase tracking-[0.3em] text-sm font-black text-gray-500 mb-3">
-                        Modelos disponibles
+                        Colección Marents
                     </p>
 
                     <h2 class="text-3xl md:text-5xl font-black uppercase text-black">
-                        Diseños para personalizar
+                        Productos especiales y modelos base
                     </h2>
 
                 </div>
 
                 <p class="text-gray-600 font-semibold max-w-xl">
-                    Elige el modelo base y transforma cada detalle a tu gusto:
-                    colores, nombres, diseños y mucho más.
+                    Elige un diseño exclusivo Marents o toma cualquier modelo base
+                    para crear una versión completamente personalizada.
                 </p>
 
             </div>
@@ -137,9 +216,7 @@
                                 alt="{{ $producto->modelo->nombre ?? 'Producto' }}"
                             >
 
-                            <div class="absolute top-4 left-4 bg-marents-gold text-black px-3 py-1 text-xs font-black uppercase">
-                                Personalizable
-                            </div>
+                
 
                         </div>
 
@@ -150,7 +227,8 @@
                             </h3>
 
                             <p class="text-gray-600 font-semibold text-sm leading-relaxed mb-5">
-                                Diseña un modelo único con acabados personalizados y estilo exclusivo.
+                                Personaliza este modelo con colores, nombres,
+                                frases o diseños únicos hechos para ti.
                             </p>
 
                             <div class="mb-4">
@@ -191,12 +269,14 @@
                                    class="flex-1 text-center bg-black text-white py-3 px-4 uppercase font-black hover:bg-marents-gold hover:text-black transition duration-300">
 
                                     Personalizar
+
                                 </a>
 
                                 <a href="{{ url('/producto/' . $producto->id) }}"
                                    class="flex-1 text-center border-[3px] border-black py-3 px-4 uppercase font-black hover:bg-black hover:text-white transition duration-300">
 
                                     Ver más
+
                                 </a>
 
                             </div>
@@ -231,7 +311,7 @@
             <div class="text-center mb-14">
 
                 <p class="uppercase tracking-[0.3em] text-sm font-black text-gray-500 mb-3">
-                    Fácil y rápido
+                    Personalización
                 </p>
 
                 <h2 class="text-4xl md:text-6xl font-black uppercase">
@@ -249,11 +329,12 @@
                     </div>
 
                     <h3 class="text-2xl font-black uppercase mb-4">
-                        Escoge tu modelo
+                        Elige un modelo
                     </h3>
 
                     <p class="text-gray-600 font-semibold leading-relaxed">
-                        Elige el diseño base que más te guste entre todos nuestros modelos disponibles.
+                        Selecciona uno de nuestros productos especiales
+                        o un modelo base para personalizar.
                     </p>
 
                 </div>
@@ -265,11 +346,12 @@
                     </div>
 
                     <h3 class="text-2xl font-black uppercase mb-4">
-                        Personaliza todo
+                        Personalízalo
                     </h3>
 
                     <p class="text-black font-semibold leading-relaxed">
-                        Agrega nombres, colores, dibujos, frases o cualquier idea que quieras plasmar.
+                        Agrega nombres, colores, dibujos,
+                        frases o cualquier detalle único.
                     </p>
 
                 </div>
@@ -281,11 +363,11 @@
                     </div>
 
                     <h3 class="text-2xl font-black uppercase mb-4">
-                        Nosotros lo creamos
+                        Lo hacemos realidad
                     </h3>
 
                     <p class="text-gray-600 font-semibold leading-relaxed">
-                        Nuestro equipo fabrica tu par personalizado con acabados únicos y máxima calidad.
+                        Fabricamos tu par personalizado con acabados únicos y máxima calidad.
                     </p>
 
                 </div>
@@ -304,7 +386,7 @@
             <div class="relative z-10">
 
                 <p class="uppercase tracking-[0.3em] text-sm font-black text-marents-gold mb-4">
-                    Edición personalizada
+                    Diseños únicos
                 </p>
 
                 <h2 class="text-4xl md:text-6xl font-black uppercase leading-[0.95] mb-6">
@@ -320,6 +402,7 @@
                    class="inline-block bg-marents-gold text-black px-10 py-5 font-black uppercase text-lg hover:bg-white transition duration-300 shadow-2xl">
 
                     Empezar personalización
+
                 </a>
 
             </div>
