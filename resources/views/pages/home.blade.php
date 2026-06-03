@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting) {https://www.tiktok.com/@marianolacost/video/7644718109785328916
                 entry.target.classList.add("show");
             }
         });
@@ -99,42 +99,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 </p>
 
-                {{-- BOTONES --}}
-                <div class="mt-10 flex flex-wrap gap-5">
+{{-- BOTONES --}}
 
-                    <a href="{{ url('/categoria/hombre') }}"
-                       class="bg-black text-white
-                              px-10 py-5
-                              rounded-full
-                              font-black uppercase
-                              tracking-[0.15em]
-                              border-[3px] border-black
-                              hover:bg-marents-gold
-                              hover:text-black
-                              hover:scale-105
-                              transition-all duration-300">
+<div class="mt-10 flex flex-wrap gap-5">
 
-                        Ver colección
+    <a href="#historia"
+       class="bg-white text-black
+              px-10 py-5
+              rounded-full
+              font-black uppercase
+              tracking-[0.15em]
+              border-[3px] border-black
+              hover:bg-black
+              hover:text-white
+              hover:scale-105
+              transition-all duration-300">
 
-                    </a>
+        Conocer más
 
-                    <a href="#marca"
-                       class="bg-white text-black
-                              px-10 py-5
-                              rounded-full
-                              font-black uppercase
-                              tracking-[0.15em]
-                              border-[3px] border-black
-                              hover:bg-black
-                              hover:text-white
-                              hover:scale-105
-                              transition-all duration-300">
+    </a>
 
-                        Conocer más
-
-                    </a>
-
-                </div>
+</div>
 
                 {{-- STATS --}}
                 <div class="flex flex-wrap gap-5 mt-14">
@@ -346,21 +331,23 @@ document.addEventListener("DOMContentLoaded", () => {
             'url' => '/categoria/ninos',
         ],
 
-        [
-            'titulo' => 'Outlet',
-            'frase' => 'Encuentra tu par ideal con precios especiales.',
-            'media' => 'img/Baner/Outlet.jpg',
-            'tipo' => 'outlet',
-            'url' => '/categoria/outlet',
-        ],
-
-        [
+               [
             'titulo' => 'Pisa Huevos',
             'frase' => 'Comodidad que se adapta a cada estilo. Personalizable o lista para usar.',
             'media' => 'img/Baner/pisa_huevo.mp4',
             'tipo' => 'video',
             'url' => '/categoria/pisa-huevos',
         ],
+
+            [
+                'titulo' => 'Outlet',
+                'frase' => 'Encuentra tu par ideal con precios especiales.',
+                'media' => 'img/Baner/Outlet.jpg',
+                'tipo' => 'outlet',
+                'url' => '/categoria/outlet',
+            ],
+
+ 
 
     ] as $item)
 
@@ -397,6 +384,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </video>
 
             @endif
+            
 
             {{-- OUTLET --}}
             @if($item['tipo'] === 'outlet')
@@ -443,14 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
         {{-- CONTENIDO --}}
         <div class="relative z-10 flex flex-col justify-end h-full p-7">
 
-            <span class="mb-3 w-fit
-                         bg-white text-black
-                         px-4 py-1 rounded-full
-                         text-xs font-black uppercase tracking-[0.2em]">
-
-                {{ $item['titulo'] }}
-
-            </span>
+    
 
             <h3 class="text-4xl text-white font-black uppercase leading-none">
 
@@ -1110,8 +1091,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- ========================================= -->
 <!-- HISTORIA -->
 <!-- ========================================= -->
-
-<section class="relative py-28 bg-[#f8f5ef] overflow-hidden border-t-[3px] border-black">
+<section id="historia" class="relative py-28 bg-[#f8f5ef] overflow-hidden border-t-[3px] border-black">
 
     {{-- GRID FONDO --}}
     <div class="absolute inset-0

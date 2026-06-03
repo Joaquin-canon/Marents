@@ -12,7 +12,7 @@
 
     <section class="relative overflow-hidden border-b-[3px] border-black">
 
-        {{-- FONDO --}}
+        {{-- GRID FONDO --}}
         <div class="absolute inset-0
             bg-[linear-gradient(to_right,rgba(0,0,0,.05)_1px,transparent_1px),
             linear-gradient(to_bottom,rgba(0,0,0,.05)_1px,transparent_1px)]
@@ -108,7 +108,7 @@
 
                 </div>
 
-                {{-- CARD DESTACADA --}}
+                {{-- CARD HERO --}}
                 <div class="relative scroll-anim">
 
                     <div class="absolute -bottom-6 -right-6
@@ -129,7 +129,7 @@
 
                         <div class="absolute inset-0
                                     bg-gradient-to-t
-                                    from-black via-black/30 to-transparent">
+                                    from-black via-black/20 to-transparent">
                         </div>
 
                         <div class="absolute bottom-0 left-0 p-8">
@@ -317,28 +317,46 @@
 
             </div>
 
-            {{-- AQUÍ VAN LOS PRODUCTOS --}}
+            {{-- PRODUCTOS --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
 
-                @foreach($productos as $producto)
+                @forelse($productos as $producto)
 
                     @php
 
-                        $imagenDB = $producto->imagenes->first()?->url;
+                        // =========================================
+                        // IMAGEN
+                        // =========================================
 
-                        if ($imagenDB) {
+                        $nombreImagen = $producto->imagenes->first()?->url;
 
-                            $imagenDB = str_replace('\\', '/', $imagenDB);
+                        $imagen = asset('img/default.png');
 
-                            if (!str_contains($imagenDB, 'img/')) {
-                                $imagenDB = 'img/' . ltrim($imagenDB, '/');
-                            }
+                        if ($nombreImagen) {
+
+                            $imagen = asset('img/productos/outlet/' . $nombreImagen);
 
                         }
+
+                        // =========================================
+                        // PRECIO
+                        // =========================================
 
                         $precio = $producto->variaciones
                                     ->where('stock', '>', 0)
                                     ->avg('precio');
+
+                        // =========================================
+                        // TALLAS
+                        // =========================================
+
+                        $tallas = $producto->variaciones
+                                    ->where('stock', '>', 0)
+                                    ->pluck('talla.numero')
+                                    ->filter()
+                                    ->unique()
+                                    ->sort()
+                                    ->values();
 
                     @endphp
 
@@ -351,13 +369,16 @@
                                 hover:shadow-[12px_12px_0_#EDE734]
                                 transition-all duration-300">
 
+                        {{-- IMAGEN --}}
                         <div class="relative overflow-hidden bg-[#f5f5f5]">
 
-                            <img src="{{ $imagenDB ? asset($imagenDB) : asset('img/default.png') }}"
-                                 class="w-full h-80 object-contain p-6
-                                        group-hover:scale-105
-                                        transition duration-500"
-                                 alt="Producto outlet">
+                            <img
+                                src="{{ $imagen }}"
+                                class="w-full h-80 object-contain p-6
+                                       group-hover:scale-105
+                                       transition duration-500"
+                                alt="{{ $producto->modelo->nombre ?? 'Producto outlet' }}"
+                            >
 
                             <div class="absolute top-4 left-4
                                         bg-red-500 text-white
@@ -370,7 +391,8 @@
 
                         </div>
 
-                        <div class="p-7">
+                        {{-- CONTENIDO --}}
+                        <div class="p-7 flex flex-col h-full">
 
                             <h3 class="text-2xl font-black uppercase mb-4">
 
@@ -385,7 +407,45 @@
 
                             </p>
 
-                            <div class="flex items-end justify-between gap-5">
+                            {{-- TALLAS --}}
+                            <div class="mb-6">
+
+                                <p class="text-xs uppercase
+                                          tracking-[0.2em]
+                                          text-black/45
+                                          font-black mb-3">
+
+                                    Tallas disponibles
+
+                                </p>
+
+                                <div class="flex flex-wrap gap-2">
+
+                                    @forelse($tallas as $talla)
+
+                                        <span class="border-2 border-black
+                                                     px-3 py-1
+                                                     text-sm font-black
+                                                     rounded-lg">
+
+                                            {{ $talla }}
+
+                                        </span>
+
+                                    @empty
+
+                                        <span class="text-sm text-black/50 font-semibold">
+                                            Sin tallas disponibles
+                                        </span>
+
+                                    @endforelse
+
+                                </div>
+
+                            </div>
+
+                            {{-- FOOTER --}}
+                            <div class="mt-auto flex items-end justify-between gap-5">
 
                                 <div>
 
@@ -424,78 +484,28 @@
 
                     </div>
 
-                @endforeach
+                @empty
 
-            </div>
+                    <div class="col-span-full">
 
-        </div>
+                        <div class="bg-white border-[3px] border-black
+                                    rounded-[30px]
+                                    p-16 text-center
+                                    shadow-[8px_8px_0_#000]">
 
-    </section>
+                            <h3 class="text-4xl font-black uppercase mb-6">
+                                Próximamente nuevos productos
+                            </h3>
 
-    <!-- ========================================= -->
-    <!-- CTA -->
-    <!-- ========================================= -->
+                            <p class="text-lg text-black/60 font-semibold">
+                                Estamos preparando nuevas referencias exclusivas para el outlet.
+                            </p>
 
-    <section class="pb-24">
+                        </div>
 
-        <div class="max-w-7xl mx-auto px-6">
+                    </div>
 
-            <div class="relative overflow-hidden
-                        bg-black text-white
-                        border-[3px] border-black
-                        rounded-[40px]
-                        p-10 md:p-16 text-center">
-
-                <div class="absolute -top-32 -right-32
-                            w-[350px] h-[350px]
-                            bg-marents-gold/20
-                            rounded-full blur-[120px]">
-                </div>
-
-                <div class="relative z-10">
-
-                    <p class="uppercase tracking-[0.3em]
-                              text-sm font-black
-                              text-marents-gold mb-5">
-
-                        Outlet Marents
-
-                    </p>
-
-                    <h2 class="text-4xl md:text-6xl
-                               font-black uppercase
-                               leading-[0.95] mb-6">
-
-                        Cuando se venden,
-                        <br>
-                        desaparecen.
-
-                    </h2>
-
-                    <p class="max-w-2xl mx-auto
-                              text-lg text-white/70
-                              font-semibold leading-relaxed mb-10">
-
-                        Aprovecha referencias exclusivas y diseños especiales
-                        antes de que salgan definitivamente del catálogo.
-
-                    </p>
-
-                    <a href="https://api.whatsapp.com/send/?phone=573045332113&text=Hola%20quiero%20ver%20productos%20del%20Outlet"
-                       target="_blank"
-                       class="inline-flex items-center justify-center
-                              bg-marents-gold text-black
-                              px-10 py-5 rounded-full
-                              font-black uppercase
-                              tracking-[0.15em]
-                              hover:bg-white
-                              transition-all duration-300">
-
-                        Consultar disponibilidad
-
-                    </a>
-
-                </div>
+                @endforelse
 
             </div>
 

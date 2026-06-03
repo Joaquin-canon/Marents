@@ -35,7 +35,10 @@ class ProductoController extends Controller
         })
         ->get();
 
-        // VISTA PERSONALIZADA PISA HUEVOS
+        // =========================================
+        // PISA HUEVOS
+        // =========================================
+
         if ($categoriaFormateada === 'pisa huevos') {
 
             return view('pages.categoria-personalizada', [
@@ -45,7 +48,23 @@ class ProductoController extends Controller
             ]);
         }
 
+        // =========================================
+        // OUTLET
+        // =========================================
+
+        if ($categoriaFormateada === 'outlet') {
+
+            return view('pages.outlet', [
+                'productos' => $productos,
+                'categoria' => 'Outlet',
+                'banner' => asset('img/Baner/Outlet.jpg')
+            ]);
+        }
+
+        // =========================================
         // RESTO DE CATEGORÍAS
+        // =========================================
+
         return view('pages.categoria', [
             'productos' => $productos,
             'categoria' => ucfirst($categoriaFormateada),
@@ -53,7 +72,10 @@ class ProductoController extends Controller
         ]);
     }
 
+    // =========================================
     // DETALLE PRODUCTO
+    // =========================================
+
     public function show($id)
     {
         $producto = Producto::with([

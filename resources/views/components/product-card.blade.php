@@ -10,11 +10,7 @@
 
             {{-- IMAGEN PRINCIPAL --}}
             <img 
-                src="{{ asset(
-                    $imagen 
-                    ? 'img/productos/' . ($categoria ?? 'hombre') . '/' . $imagen 
-                    : 'img/default.png'
-                ) }}"
+                src="{{ asset($imagen ?: 'img/default.png') }}"
                 alt="{{ $nombre }}"
                 class="absolute h-[75%] object-contain 
                        transition duration-500 
@@ -25,7 +21,7 @@
             {{-- IMAGEN HOVER --}}
             @if(!empty($imagen_hover))
                 <img 
-                    src="{{ asset('img/productos/' . ($categoria ?? 'hombre') . '/' . $imagen_hover) }}"
+                    src="{{ asset($imagen_hover) }}"
                     alt="{{ $nombre }}"
                     class="absolute h-[75%] object-contain 
                            transition duration-500 
@@ -59,7 +55,6 @@
                 {{ $nombre }}
             </p>
 
-            {{-- SUB --}}
             <p class="text-[10px] uppercase tracking-[0.2em] text-black/50 font-black">
                 Marents
             </p>
